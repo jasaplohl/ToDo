@@ -6,6 +6,8 @@ class TodoListScreen extends StatelessWidget {
 
   const TodoListScreen({ Key? key }) : super(key: key);
 
+  // TODO: use animated list
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

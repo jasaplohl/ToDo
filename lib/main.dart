@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const CategoriesScreen(),
+      home: const TodoListScreen(),
       routes: {
-        CategoriesScreen.routeName: (context) => const CategoriesScreen(),
+        TodoListScreen.routeName: (context) => const TodoListScreen(),
+        CategoriesScreen.routeName: (context) => CategoriesScreen(),
+        CompletedScreen.routeName: (context) => const CompletedScreen(),
         AddCategoryScreen.routeName: (context) => const AddCategoryScreen(),
         AddTodoItemScreen.routeName: (context) => const AddTodoItemScreen(),
-        TodoListScreen.routeName: (context) => const TodoListScreen(),
-        CompletedScreen.routeName: (context) => const CompletedScreen(),
       },
     );
   }
