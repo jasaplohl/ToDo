@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:todo/widgets/my_drawer.dart';
 
-class CategoriesScreen extends StatelessWidget {
-  static const routeName = "categories";
+class CompletedScreen extends StatelessWidget {
+  static const routeName = "completed";
 
-  const CategoriesScreen({ Key? key }) : super(key: key);
+  const CompletedScreen({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Categories")),
+      appBar: AppBar(title: const Text("Completed tasks")),
       drawer: const MyDrawer(),
     );
   }

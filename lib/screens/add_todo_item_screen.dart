@@ -8,7 +8,7 @@ class AddTodoItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Create an item")),
+      appBar: AppBar(title: const Text("Create a task")),
     );
   }
 }
