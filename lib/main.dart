@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo/providers/categories.dart';
 import 'package:todo/screens/add_todo_item_screen.dart';
 import 'package:todo/screens/categories_screen.dart';
 import 'package:todo/screens/add_category_screen.dart';
@@ -19,19 +21,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appTitle,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (context) => Categories(),
+      child: MaterialApp(
+        title: appTitle,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const TodoListScreen(),
+        routes: {
+          TodoListScreen.routeName: (context) => const TodoListScreen(),
+          CategoriesScreen.routeName: (context) => CategoriesScreen(),
+          CompletedScreen.routeName: (context) => const CompletedScreen(),
+          AddCategoryScreen.routeName: (context) => const AddCategoryScreen(),
+          AddTodoItemScreen.routeName: (context) => const AddTodoItemScreen(),
+        },
       ),
-      home: const TodoListScreen(),
-      routes: {
-        TodoListScreen.routeName: (context) => const TodoListScreen(),
-        CategoriesScreen.routeName: (context) => CategoriesScreen(),
-        CompletedScreen.routeName: (context) => const CompletedScreen(),
-        AddCategoryScreen.routeName: (context) => const AddCategoryScreen(),
-        AddTodoItemScreen.routeName: (context) => const AddTodoItemScreen(),
-      },
     );
   }
 }
