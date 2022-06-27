@@ -71,6 +71,12 @@ class DBHelper {
     );
   }
 
+  static Future<void> deleteCategory(int id) async {
+    final Database db = await DBHelper._openDb();
+
+    db.delete("categories", where: "id = ?", whereArgs: [id]);
+  }
+
   static Future<List<Category>> getCategories() async {
     final Database db = await DBHelper._openDb();
 

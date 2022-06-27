@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/providers/categories.dart';
+import 'package:todo/widgets/category_item.dart';
 import 'package:todo/widgets/my_drawer.dart';
 import 'package:todo/models/category.dart';
 
@@ -39,12 +40,7 @@ class CategoriesScreen extends StatelessWidget {
                   return ListView.builder(
                     itemCount: categories.itemCount,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Icon(IconData(categories.items[index].icon, fontFamily: 'MaterialIcons')),
-                        title: Text("${categories.items[index].title} (${categories.items[index].id})"),
-                        trailing: Text(categories.items[index].custom.toString()),
-                        iconColor: Color(categories.items[index].color),
-                      );
+                      return CategoryItem(categories.items[index]);
                     }
                   );
                 } else {
