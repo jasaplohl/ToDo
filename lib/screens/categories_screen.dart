@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/providers/categories.dart';
+import 'package:todo/screens/add_category_screen.dart';
 import 'package:todo/widgets/category_item.dart';
 import 'package:todo/widgets/my_drawer.dart';
-import 'package:todo/models/category.dart';
 
 class CategoriesScreen extends StatelessWidget {
   static const routeName = "categories";
@@ -18,12 +18,13 @@ class CategoriesScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Provider.of<Categories>(context, listen: false).addCategory(Category(
-            icon: Icons.location_on.codePoint,
-            title: "Trips",
-            color: Colors.pink.value,
-            custom: true
-          ));
+          // Provider.of<Categories>(context, listen: false).addCategory(Category(
+          //   icon: Icons.location_on.codePoint,
+          //   title: "Trips",
+          //   color: Colors.pink.value,
+          //   custom: true
+          // ));
+          Navigator.of(context).pushNamed(AddCategoryScreen.routeName);
         },
       ),
       body: FutureBuilder(

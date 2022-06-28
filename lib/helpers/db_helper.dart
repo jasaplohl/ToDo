@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:todo/models/category.dart';
+import 'package:todo/models/task.dart';
 
 class DBHelper {
   
@@ -10,7 +11,7 @@ class DBHelper {
     WidgetsFlutterBinding.ensureInitialized();
     String dbPath = await getDatabasesPath();
 
-    return openDatabase(
+    return await openDatabase(
       join(dbPath, "todo.db"),
       onCreate: (Database db, int version) async {
         await _createTableCategories(db);
@@ -75,10 +76,10 @@ class DBHelper {
     await db.execute("""
       INSERT INTO tasks (title, description, time, category_id, recurring, times_completed)
       VALUES 
-        ('Bled', 'Izlet na Bled.', DATE(), 1, 0, 0),
-        ('Volčji potok', 'Sprehod po volčjem potoku.', DATE(), 1, 0, 0),
-        ('Pica', 'Doma pripravljena pica.', DATE(), 3, 1, 0),
-        ('Vampyre diaries', 'Pogledati serijo.', DATE(), 5, 0, 0);
+        ('Bled', 'Izlet na Bled.', DATETIME(), 1, 0, 0),
+        ('Volčji potok', 'Sprehod po volčjem potoku.', DATETIME(), 1, 0, 0),
+        ('Pica', 'Doma pripravljena pica.', DATETIME(), 3, 1, 0),
+        ('Vampyre diaries', 'Pogledati serijo.', DATETIME(), 5, 0, 0);
     """);
   }
 
@@ -95,7 +96,7 @@ class DBHelper {
   static Future<int> insertCategory(Map<String, Object> data) async {
     final Database db = await DBHelper._openDb();
 
-    return db.insert(
+    return await db.insert(
       "categories", 
       data
     );
@@ -104,12 +105,11 @@ class DBHelper {
   static Future<void> deleteCategory(int id) async {
     final Database db = await DBHelper._openDb();
 
-    db.delete("categories", where: "id = ?", whereArgs: [id]);
+    await db.delete("categories", where: "id = ?", whereArgs: [id]);
   }
 
   static Future<List<Category>> getCategories() async {
     final Database db = await DBHelper._openDb();
-
     final List<Map<String, dynamic>> maps = await db.query('categories');
     
     return List.generate(maps.length, (i) {
@@ -118,7 +118,24 @@ class DBHelper {
         icon: maps[i]['icon'],
         title: maps[i]['title'],
         color: maps[i]['color'],
-        custom: maps[i]['custom'] == null || maps[i]['custom'] == 0 ? false : true
+        custom: maps[i]['custom'] == 0 ? false : true
+      );
+    });
+  }
+
+  static Future<List<Task>> getTasks() async {
+    final Database db = await DBHelper._openDb();
+    final List<Map<String, dynamic>> maps = await db.query('tasks');
+    
+    return List.generate(maps.length, (i) {
+      return Task(
+        id: maps[i]['id'],
+        title: maps[i]['title'],
+        description: maps[i]['description'],
+        time: DateTime.parse(maps[i]['time']),
+        category: maps[i]['category_id'],
+        recurring: maps[i]['recurring'] == 0 ? false : true,
+        timesCompleted: maps[i]['times_completed']
       );
     });
   }

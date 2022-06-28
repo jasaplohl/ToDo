@@ -4,9 +4,9 @@ import 'package:todo/models/category.dart';
 import 'package:todo/providers/categories.dart';
 
 class CategoryItem extends StatelessWidget {
-  Category category;
+  final Category category;
 
-  CategoryItem(
+  const CategoryItem(
     this.category,
     { Key? key }
   ) : super(key: key);

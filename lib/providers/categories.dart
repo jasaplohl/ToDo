@@ -34,7 +34,7 @@ class Categories with ChangeNotifier {
   Future<void> deleteCategory(int id) async {
     if(id == -1) return;
     
-    await DBHelper.deleteCategory(id);
+    DBHelper.deleteCategory(id);
     _categories.removeWhere((element) {
       return element.id == id;
     });
