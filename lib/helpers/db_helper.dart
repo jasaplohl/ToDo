@@ -52,8 +52,7 @@ class DBHelper {
         description TEXT,
         time TIMESTAMP,
         category_id INTEGER NOT NULL,
-        recurring INTEGER NOT NULL,
-        times_completed INTEGER NOT NULL,
+        completed INTEGER NOT NULL,
         FOREIGN KEY (category_id) REFERENCES categories(id)
       );
     """);
@@ -74,12 +73,12 @@ class DBHelper {
 
   static Future<void> _initTasks(Database db) async {
     await db.execute("""
-      INSERT INTO tasks (title, description, time, category_id, recurring, times_completed)
+      INSERT INTO tasks (title, description, time, category_id, completed)
       VALUES 
-        ('Bled', 'Izlet na Bled.', DATETIME(), 1, 0, 0),
-        ('Volčji potok', 'Sprehod po volčjem potoku.', DATETIME(), 1, 0, 0),
-        ('Pica', 'Doma pripravljena pica.', DATETIME(), 3, 1, 0),
-        ('Vampyre diaries', 'Pogledati serijo.', DATETIME(), 5, 0, 0);
+        ('Bled', 'Izlet na Bled.', DATETIME(), 1, 0),
+        ('Volčji potok', 'Sprehod po volčjem potoku.', DATETIME(), 1, 0),
+        ('Pica', 'Doma pripravljena pica.', DATETIME(), 3, 0),
+        ('Vampyre diaries', 'Pogledati serijo.', DATETIME(), 5, 0);
     """);
   }
 
@@ -134,8 +133,7 @@ class DBHelper {
         description: maps[i]['description'],
         time: DateTime.parse(maps[i]['time']),
         category: maps[i]['category_id'],
-        recurring: maps[i]['recurring'] == 0 ? false : true,
-        timesCompleted: maps[i]['times_completed']
+        completed: maps[i]['completed'] == 0 ? false : true
       );
     });
   }

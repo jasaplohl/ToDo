@@ -12,14 +12,32 @@ class TodoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: IconButton(
-        icon: const Icon(Icons.check),
-        onPressed: () {
-          // TODO: change the status to completed
-        },
-      ),
+      leading: const Icon(Icons.check), // TODO: The icon of the category in the right color
       title: Text(task.title),
       subtitle: Text(task.description ?? ''),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(
+              Icons.done,
+              color: Colors.green,
+            ),
+            onPressed: () {
+              // TODO: Change the status to done
+            }
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              // TODO: Delete from the db
+            }
+          )
+        ]
+      ),
     );
   }
 }

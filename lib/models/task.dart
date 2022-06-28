@@ -4,17 +4,15 @@ class Task {
   final String? description;
   final DateTime? time; // If time is set, we send a push notification when the time is reached
   final int category; // TODO: change to Category() model
-  final bool recurring;
-  final int? timesCompleted; // If a task is recurring, we need to save the number of times it was completed
+  final bool completed; // TODO: recurring tasks?
 
   Task({
     this.id,
     required this.title,
     required this.category,
-    required this.recurring,
+    required this.completed,
     this.description,
-    this.time,
-    this.timesCompleted
+    this.time
   });
 
   Map<String, Object?> toMap() {
@@ -23,8 +21,7 @@ class Task {
       'description': description,
       'time': time,
       'category': category,
-      'recurring': recurring,
-      'timesCompleted': timesCompleted
+      'completed': completed
     };
   }
 }
