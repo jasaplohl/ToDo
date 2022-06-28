@@ -5,52 +5,61 @@ import 'package:sqflite/sqflite.dart';
 import 'package:todo/models/category.dart';
 
 class DBHelper {
-  static const String _dbName = "todo.db";
-  static const int _dbVersion = 1;
-
+  
   static Future<Database> _openDb() async {
     WidgetsFlutterBinding.ensureInitialized();
-
     String dbPath = await getDatabasesPath();
 
     return openDatabase(
-      join(dbPath, _dbName),
-      version: _dbVersion,
+      join(dbPath, "todo.db"),
       onCreate: (Database db, int version) async {
-        print("Creating");
-        await createTables(db);
-        await initCategories(db);
+        await _createTableCategories(db);
+        await _createTableTasks(db);
+        await _initCategories(db);
+        await _initTasks(db);
       },
-      onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        print("Upgrading");
-        await dropTables(db);
-        await createTables(db);
-        await initCategories(db);
-      }
+      version: 1
     );
   }
 
-  static Future<void> createTables(Database db) async {
-    db.execute("""
-      CREATE TABLE categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        icon INTEGER,
-        title TEXT,
-        color INTEGER,
-        custom INTEGER
-      );
-    """);
-  }
-
-  static Future<void> dropTables(Database db) async {
-    db.execute("""
+  static Future<void> _dropTables(Database db) async {
+    await db.execute("""
       DROP TABLE IF EXISTS categories;
+    """);
+    await db.execute("""
       DROP TABLE IF EXISTS tasks;
     """);
   }
 
-  static Future<void> initCategories(Database db) async {
-    db.execute("""
+  static Future<void> _createTableCategories(Database db) async {
+    await db.execute("""
+      CREATE TABLE categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        icon INTEGER,
+        title TEXT NOT NULL,
+        color INTEGER,
+        custom INTEGER NOT NULL
+      );
+    """);
+  }
+
+  static Future<void> _createTableTasks(Database db) async {
+    await db.execute("""
+      CREATE TABLE tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        title TEXT NOT NULL,
+        description TEXT,
+        time TIMESTAMP,
+        category_id INTEGER NOT NULL,
+        recurring INTEGER NOT NULL,
+        times_completed INTEGER NOT NULL,
+        FOREIGN KEY (category_id) REFERENCES categories(id)
+      );
+    """);
+  }
+
+  static Future<void> _initCategories(Database db) async {
+    await db.execute("""
       INSERT INTO categories (icon, title, color, custom)
       VALUES 
         (${Icons.location_on.codePoint}, 'Trips', ${Colors.pink.value}, 0),
@@ -60,6 +69,27 @@ class DBHelper {
         (${Icons.local_movies_outlined.codePoint}, 'Movies', ${Colors.blue.value}, 0),
         (${Icons.shopping_cart.codePoint}, 'Shopping', ${Colors.blueGrey.value}, 0);
     """);
+  }
+
+  static Future<void> _initTasks(Database db) async {
+    await db.execute("""
+      INSERT INTO tasks (title, description, time, category_id, recurring, times_completed)
+      VALUES 
+        ('Bled', 'Izlet na Bled.', DATE(), 1, 0, 0),
+        ('Volčji potok', 'Sprehod po volčjem potoku.', DATE(), 1, 0, 0),
+        ('Pica', 'Doma pripravljena pica.', DATE(), 3, 1, 0),
+        ('Vampyre diaries', 'Pogledati serijo.', DATE(), 5, 0, 0);
+    """);
+  }
+
+  static Future<void> resetDB() async {
+    final Database db = await DBHelper._openDb();
+
+    await _dropTables(db);
+    await _createTableCategories(db);
+    await _createTableTasks(db);
+    await _initCategories(db);
+    await _initTasks(db);
   }
 
   static Future<int> insertCategory(Map<String, Object> data) async {

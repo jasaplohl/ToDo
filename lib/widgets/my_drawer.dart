@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/helpers/constants.dart';
+import 'package:todo/helpers/db_helper.dart';
 import 'package:todo/screens/categories_screen.dart';
 import 'package:todo/screens/completed_screen.dart';
 import 'package:todo/screens/todo_list_screen.dart';
@@ -17,7 +18,7 @@ class MyDrawer extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             child: const Text(
-              'Drawer Header',
+              appTitle,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -43,6 +44,14 @@ class MyDrawer extends StatelessWidget {
             title: const Text("Completed"),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(CompletedScreen.routeName);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text("Reset DB"),
+            onTap: () {
+              DBHelper.resetDB();
+              Navigator.pop(context);
             },
           )
         ],
