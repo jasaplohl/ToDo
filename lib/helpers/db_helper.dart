@@ -107,6 +107,23 @@ class DBHelper {
     await db.delete("categories", where: "id = ?", whereArgs: [id]);
   }
 
+  static Future<Category> getCategory(int id) async {
+    final Database db = await DBHelper._openDb();
+    final List<Map<String, dynamic>> maps = await db.query(
+      'categories',
+      where: "id = ?",
+      whereArgs: [id]
+    );
+    
+    return Category(
+      id: maps[0]['id'],
+      icon: maps[0]['icon'],
+      title: maps[0]['title'],
+      color: maps[0]['color'],
+      custom: maps[0]['custom'] == 0 ? false : true
+    );
+  }
+
   static Future<List<Category>> getCategories() async {
     final Database db = await DBHelper._openDb();
     final List<Map<String, dynamic>> maps = await db.query('categories');
@@ -124,16 +141,31 @@ class DBHelper {
 
   static Future<List<Task>> getTasks() async {
     final Database db = await DBHelper._openDb();
-    final List<Map<String, dynamic>> maps = await db.query('tasks');
+    final List<Map<String, dynamic>> maps = await db.rawQuery("""
+      SELECT t.id task_id, t.title task_title, t.description task_desc,
+             t.time task_time, t.completed task_completed,
+             c.id category_id, c.icon category_icon, c.title category_title,
+             c.color category_color, c.custom category_custom
+      FROM tasks t
+      INNER JOIN categories c ON
+        t.category_id = c.id
+    """);
     
     return List.generate(maps.length, (i) {
+      Category category = Category(
+        id: maps[i]['category_id'],
+        title: maps[i]['category_title'],
+        icon: maps[i]['category_icon'],
+        color: maps[i]['category_color'],
+        custom: maps[i]['category_custom'],
+      );
       return Task(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        description: maps[i]['description'],
-        time: DateTime.parse(maps[i]['time']),
-        category: maps[i]['category_id'],
-        completed: maps[i]['completed'] == 0 ? false : true
+        id: maps[i]['task_id'],
+        title: maps[i]['task_title'],
+        description: maps[i]['task_desc'],
+        time: DateTime.parse(maps[i]['task_time']),
+        category: category,
+        completed: maps[i]['task_completed'] == 0 ? false : true
       );
     });
   }

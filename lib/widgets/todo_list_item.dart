@@ -12,7 +12,8 @@ class TodoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.check), // TODO: The icon of the category in the right color
+      leading: Icon(IconData(task.category.icon, fontFamily: 'MaterialIcons')),
+      iconColor: Color(task.category.color),
       title: Text(task.title),
       subtitle: Text(task.description ?? ''),
       trailing: Row(

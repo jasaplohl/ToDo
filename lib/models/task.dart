@@ -1,9 +1,11 @@
+import 'package:todo/models/category.dart';
+
 class Task {
   final int? id;
   final String title;
   final String? description;
   final DateTime? time; // If time is set, we send a push notification when the time is reached
-  final int category; // TODO: change to Category() model
+  final Category category;
   final bool completed; // TODO: recurring tasks?
 
   Task({
@@ -20,7 +22,7 @@ class Task {
       'title': title,
       'description': description,
       'time': time,
-      'category': category,
+      'category': category.id,
       'completed': completed
     };
   }
