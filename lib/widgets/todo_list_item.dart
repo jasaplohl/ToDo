@@ -18,25 +18,8 @@ class TodoListItem extends StatelessWidget {
         IconData(task.category.icon, fontFamily: 'MaterialIcons'),
         color: Color(task.category.color),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(task.title),
-          Container(
-            child: task.time != null ? const Icon(Icons.alarm) : null,
-          )
-        ],
-      ),
+      title: Text(task.title),
       subtitle: Text(task.description ?? ''),
-      trailing: IconButton(
-        icon: const Icon(
-          Icons.done,
-          color: Colors.green,
-        ),
-        onPressed: () {
-          Provider.of<Tasks>(context, listen: false).finishTask(task);
-        }
-      )
     );
   }
 }
