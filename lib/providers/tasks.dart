@@ -13,8 +13,8 @@ class Tasks with ChangeNotifier {
     return _tasks.length;
   }
 
-  Future<void> initializeTasks() async {
-    _tasks = await DBHelper.getTasks();
+  Future<void> initializeTasks(int completed) async {
+    _tasks = await DBHelper.getTasks(completed);
     notifyListeners();
   }
 

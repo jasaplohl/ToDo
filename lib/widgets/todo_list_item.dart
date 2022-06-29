@@ -28,20 +28,15 @@ class TodoListItem extends StatelessWidget {
         ],
       ),
       subtitle: Text(task.description ?? ''),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(
-              Icons.done,
-              color: Colors.green,
-            ),
-            onPressed: () {
-              Provider.of<Tasks>(context, listen: false).finishTask(task);
-            }
-          )
-        ]
-      ),
+      trailing: IconButton(
+        icon: const Icon(
+          Icons.done,
+          color: Colors.green,
+        ),
+        onPressed: () {
+          Provider.of<Tasks>(context, listen: false).finishTask(task);
+        }
+      )
     );
   }
 }

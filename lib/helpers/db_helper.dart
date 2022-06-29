@@ -152,7 +152,7 @@ class DBHelper {
     );
   }
 
-  static Future<List<Task>> getTasks() async {
+  static Future<List<Task>> getTasks(int completed) async {
     final Database db = await DBHelper._openDb();
     final List<Map<String, dynamic>> maps = await db.rawQuery("""
       SELECT t.id task_id, t.title task_title, t.description task_desc,
@@ -162,7 +162,7 @@ class DBHelper {
       FROM tasks t
       INNER JOIN categories c ON
         t.category_id = c.id
-      WHERE task_completed = 0;
+      WHERE task_completed = $completed;
     """);
     
     return List.generate(maps.length, (i) {

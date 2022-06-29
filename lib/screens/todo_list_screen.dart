@@ -24,7 +24,7 @@ class TodoListScreen extends StatelessWidget {
         },
       ),
       body: FutureBuilder(
-        future: Provider.of<Tasks>(context, listen: false).initializeTasks(),
+        future: Provider.of<Tasks>(context, listen: false).initializeTasks(0),
         builder: (ctx, snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
