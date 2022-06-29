@@ -6,7 +6,7 @@ class Task {
   final String? description;
   final DateTime? time; // If time is set, we send a push notification when the time is reached
   final Category category;
-  final bool completed; // TODO: recurring tasks?
+  bool completed; // TODO: recurring tasks?
 
   Task({
     this.id,
@@ -21,8 +21,19 @@ class Task {
     return {
       'title': title,
       'description': description,
-      'time': time,
+      'time': time != null ? time!.toIso8601String() : null,
       'category': category.id,
+      'completed': completed
+    };
+  }
+
+  Map<String, Object?> toMapWithId() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'time': time != null ? time!.toIso8601String(): null,
+      'category_id': category.id,
       'completed': completed
     };
   }

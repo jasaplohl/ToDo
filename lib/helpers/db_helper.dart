@@ -50,7 +50,7 @@ class DBHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT NOT NULL,
         description TEXT,
-        time TIMESTAMP,
+        time TEXT,
         category_id INTEGER NOT NULL,
         completed INTEGER NOT NULL,
         FOREIGN KEY (category_id) REFERENCES categories(id)
@@ -78,7 +78,9 @@ class DBHelper {
         ('Bled', 'Izlet na Bled.', DATETIME(), 1, 0),
         ('Volčji potok', 'Sprehod po volčjem potoku.', DATETIME(), 1, 0),
         ('Pica', 'Doma pripravljena pica.', DATETIME(), 3, 0),
-        ('Vampyre diaries', 'Pogledati serijo.', DATETIME(), 5, 0);
+        ('Vampyre diaries', 'Pogledati serijo.', DATETIME(), 5, 0),
+        ('Okrog brda', NULL, DATETIME(), 1, 0),
+        ('Lago de Predil', NULL, NULL, 2, 0);
     """);
   }
 
@@ -139,6 +141,17 @@ class DBHelper {
     });
   }
 
+  static Future<void> finishTask(Task task) async {
+    final Database db = await DBHelper._openDb();
+
+    await db.update(
+      "tasks", 
+      task.toMapWithId(),
+      where: "id = ?", 
+      whereArgs: [task.id]
+    );
+  }
+
   static Future<List<Task>> getTasks() async {
     final Database db = await DBHelper._openDb();
     final List<Map<String, dynamic>> maps = await db.rawQuery("""
@@ -149,6 +162,7 @@ class DBHelper {
       FROM tasks t
       INNER JOIN categories c ON
         t.category_id = c.id
+      WHERE task_completed = 0;
     """);
     
     return List.generate(maps.length, (i) {
@@ -157,13 +171,19 @@ class DBHelper {
         title: maps[i]['category_title'],
         icon: maps[i]['category_icon'],
         color: maps[i]['category_color'],
-        custom: maps[i]['category_custom'],
+        custom: maps[i]['category_custom'] == 0 ? false : true
       );
+      DateTime? time;
+      try {
+        time = DateTime.parse(maps[i]['task_time']);
+      } catch(err) {
+        time = null;
+      }
       return Task(
         id: maps[i]['task_id'],
         title: maps[i]['task_title'],
         description: maps[i]['task_desc'],
-        time: DateTime.parse(maps[i]['task_time']),
+        time: time,
         category: category,
         completed: maps[i]['task_completed'] == 0 ? false : true
       );

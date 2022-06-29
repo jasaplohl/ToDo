@@ -17,4 +17,11 @@ class Tasks with ChangeNotifier {
     _tasks = await DBHelper.getTasks();
     notifyListeners();
   }
+
+  Future<void> finishTask(Task task) async {
+    task.completed = true;
+    await DBHelper.finishTask(task);
+    _tasks[_tasks.indexWhere((element) => element.id == task.id)] = task;
+    notifyListeners();
+  }
 }
