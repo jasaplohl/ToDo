@@ -6,7 +6,7 @@ class Task {
   final String? description;
   final DateTime? time; // If time is set, we send a push notification when the time is reached
   final Category category;
-  bool completed; // TODO: recurring tasks?
+  bool completed;
 
   Task({
     this.id,
@@ -34,7 +34,7 @@ class Task {
       'description': description,
       'time': time != null ? time!.toIso8601String(): null,
       'category_id': category.id,
-      'completed': completed
+      'completed': completed ? 1 : 0
     };
   }
 }

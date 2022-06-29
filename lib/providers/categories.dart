@@ -35,9 +35,7 @@ class Categories with ChangeNotifier {
     if(id == -1) return;
     
     DBHelper.deleteCategory(id);
-    _categories.removeWhere((element) {
-      return element.id == id;
-    });
+    _categories.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 }

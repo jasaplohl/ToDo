@@ -37,7 +37,6 @@ class TodoListItem extends StatelessWidget {
               color: Colors.green,
             ),
             onPressed: () {
-              // TODO: Change the status to done
               Provider.of<Tasks>(context, listen: false).finishTask(task);
             }
           )
